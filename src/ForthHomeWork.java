@@ -47,8 +47,10 @@ public class ForthHomeWork {
     public static boolean checkWin(char symb) {
         int countX = 0;
         int countY = 0;
+        int countD = 0;
         boolean gapX = false;
         boolean gapY = false;
+        boolean gapD = false;
 
         //check vertical and horizontal lines
         for (int i = 0; i < SIZE; i++) {
@@ -61,7 +63,7 @@ public class ForthHomeWork {
                     gapX = true;
                 if (map[j][i] == symb && (!gapX))
                     countX++;
-                if (countX == DOTS_TO_WIN || countY == DOTS_TO_WIN) return true;
+                if (countX >= DOTS_TO_WIN || countY >= DOTS_TO_WIN) return true;
             }
             countX = 0;
             countY = 0;
@@ -70,17 +72,62 @@ public class ForthHomeWork {
         }
 
         //check all diagonal lines
-        // ->/<-
-        if(map[0][3] == symb && map[1][2] == symb && map[2][1] == symb && map[3][0] == symb) return true;
-        if(map[0][4] == symb && map[1][3] == symb && map[2][2] == symb && map[3][1] == symb) return true;
-        if(map[1][3] == symb && map[2][2] == symb && map[3][1] == symb && map[4][0] == symb) return true;
-        if(map[1][4] == symb && map[2][3] == symb && map[3][2] == symb && map[4][1] == symb) return true;
-        // ->\<-
-        if(map[0][1] == symb && map[1][2] == symb && map[2][3] == symb && map[3][4] == symb) return true;
-        if(map[0][0] == symb && map[1][1] == symb && map[2][2] == symb && map[3][3] == symb) return true;
-        if(map[1][1] == symb && map[2][2] == symb && map[3][3] == symb && map[4][4] == symb) return true;
-        if(map[1][0] == symb && map[2][1] == symb && map[3][2] == symb && map[4][3] == symb) return true;
+        // ->/
+        for (int i = SIZE; i > 0; i--) {
+            for (int j = 0; j < SIZE - i + 1; j++) {
+                if (map[SIZE - i - j][j] != symb)
+                    gapD = true;
+                if (map[SIZE - i - j][j] == symb && (!gapD))
+                    countD++;
+            }
+            if (countD != 0) System.out.println(countD);
+            if (countD >= DOTS_TO_WIN) return true;
 
+            countD = 0;
+            gapD = false;
+        }
+        // /<-
+        for (int i = 1; i < SIZE; i++) {
+            for (int j = SIZE - 1; j >= i; j--) {
+                if (map[SIZE - 1 + i - j][j] != symb)
+                    gapD = true;
+                if (map[SIZE - 1 + i - j][j] == symb && (!gapD))
+                    countD++;
+            }
+            if (countD != 0) System.out.println(countD);
+            if (countD >= DOTS_TO_WIN) return true;
+
+            countD = 0;
+            gapD = false;
+        }
+        // ->\
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = i; j < SIZE; j++) {
+                if (map[j - i][j] != symb)
+                    gapD = true;
+                if (map[j - i][j] == symb && (!gapD))
+                    countD++;
+            }
+            if (countD != 0) System.out.println(countD);
+            if (countD >= DOTS_TO_WIN) return true;
+
+            countD = 0;
+            gapD = false;
+        }
+        // \<-
+        for (int i = 1; i < SIZE; i++) {
+            for (int j = i; j < SIZE; j++) {
+                if (map[j][j - i] != symb)
+                    gapD = true;
+                if (map[j][j - i] == symb && (!gapD))
+                    countD++;
+            }
+            if (countD != 0) System.out.println(countD);
+            if (countD >= DOTS_TO_WIN) return true;
+
+            countD = 0;
+            gapD = false;
+        }
         return false;
     }
     public static boolean isMapFull() {
